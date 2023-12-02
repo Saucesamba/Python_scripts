@@ -6,7 +6,7 @@ import numpy as np
 def frange(x, y, jump):
     while x < y:
         yield float(x)
-    x += jump
+        x += jump
 
 # Данные
 R1 = 8
@@ -81,33 +81,33 @@ plt.show()
 
 # Четвертое задание
 w = 2 * 10**3
-A = 10
+Амплитуда = 10
 
 this = k(w)
 print(this)
 
-U_B = lambda t: A*sin(w*t)
+U_входное = lambda t: Амплитуда*sin(w*t)
 
-Sd_A = sqrt((this.real)**2 + this.imag**2)
-Sd_Ph = atan(this.imag / this.real)
+Сдвиг_по_амплитуде = sqrt((this.real)**2 + this.imag**2)
+Сдвиг_по_фазе = atan(this.imag / this.real)
 
-Ph_Bh = Sd_Ph
-A_Bih = A * Sd_A
+Фаза_выходная = Сдвиг_по_фазе
+Амплитуда_выходная = Амплитуда * Сдвиг_по_амплитуде
 
-U_vih = lambda t: A_Bih*sin(w*t + Ph_Bh)
-print(Sd_A, Sd_Ph)
+U_выходное = lambda t: Амплитуда_выходная*sin(w*t + Фаза_выходная)
+print(Сдвиг_по_амплитуде, Сдвиг_по_фазе)
 
-D_vh = []
-D_vih = []
+Диаграмма_входная = []
+Диаграмма_выходная = []
 rng = list(frange(0, 0.0005, 0.000001))
 
 for t in rng:
-    D_vh.append(U_B(t))
-    D_vih.append(U_vih(t))
+    Диаграмма_входная.append(U_входное(t))
+    Диаграмма_выходная.append(U_выходное(t))
 
 plt.title("Временные диаграммы напряжения (увеличено)")
-plt.plot(rng, D_vh)
-plt.plot(rng, D_vih)
+plt.plot(rng, Диаграмма_входная)
+plt.plot(rng, Диаграмма_выходная)
 
 plt.grid(True)
 
@@ -117,17 +117,17 @@ ax = plt.gca()
 
 plt.show()
 
-D_vh = []
-D_vih = []
+Диаграмма_входная = []
+Диаграмма_выходная = []
 rng = list(frange(0, 0.01, 0.000001))
 
 for t in rng:
-    D_vh.append (U_B(t))
-    D_vih.append(U_vih(t))
+    Диаграмма_входная.append(U_входное(t))
+    Диаграмма_выходная.append(U_выходное(t))
 
 plt.title("Временные диаграммы напряжения")
-plt.plot(rng, D_vh)
-plt.plot(rng, D_vih)
+plt.plot(rng, Диаграмма_входная)
+plt.plot(rng, Диаграмма_выходная)
 
 plt.grid(True)
 
@@ -136,12 +136,13 @@ plt.xlabel('Время t, c')
 ax = plt.gca()
 
 plt.show()
+
 # Пятое задание
 an = lambda n: (2/(pi*n))
-an_вых = lambda n: an(n)*Sd_A
+an_вых = lambda n: an(n)*Сдвиг_по_амплитуде
 
 itn = lambda n,x: an(n)*cos(abs(n)*2000*x)
-out = lambda n,x: Sd_A*an(n)*cos(abs(n)*2000*x + Ph_Bh)
+out = lambda n,x: Сдвиг_по_амплитуде*an(n)*cos(abs(n)*2000*x + Фаза_выходная)
 
 rng = []
 rngx = list(frange(-0.005, 0.005, 0.000001))
