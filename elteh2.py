@@ -8,20 +8,20 @@ def frange(x, y, jump):
         yield float(x)
         x += jump
 
-# Данные
+# Данные //вставил свои данные
 R1 = 8
 R2 = 24
 R3 = 6
 L = 20*(10**-3)
 
-# Первое задание
+# Первое задание + //поменял Rc на Rl, и записал формулы для K(w)
 Rl= lambda w: (1j*w*L)
 
 k = lambda w: (R2*R3)/(((R2+R3+Rl)*(R1+R2))-R2**2)
 
 k = lambda w: 9/((10**-3)*40j*w+24)
 
-# Второе задание
+# Второе задание +
 АЧХ = []
 ФЧХ = []
 rng = list(range(0, 50000))
@@ -43,7 +43,7 @@ plt.grid(True)
 plt.plot(rng, ФЧХ, color='#039660')
 plt.show()
 
-# Третье задание
+# Третье задание +
 ГОДОГРАФ_X = []
 ГОДОГРАФ_Y = []
 rng = list(range(1, 5000))
@@ -79,7 +79,7 @@ plt.xlabel('RE')
 plt.ylabel('IM')
 plt.show()
 
-# Четвертое задание
+# Четвертое задание +
 w = 2 * 10**3
 Амплитуда = 10
 
@@ -95,11 +95,11 @@ U_входное = lambda t: Амплитуда*sin(w*t)
 Амплитуда_выходная = Амплитуда * Сдвиг_по_амплитуде
 
 U_выходное = lambda t: Амплитуда_выходная*sin(w*t + Фаза_выходная)
-print(Сдвиг_по_амплитуде, Сдвиг_по_фазе)
+print("Сдвиг по амплитуде: ", Сдвиг_по_амплитуде,'\n Сдвиг по фазе: ', Сдвиг_по_фазе) #оформил красивый вывод
 
 Диаграмма_входная = []
 Диаграмма_выходная = []
-rng = list(frange(0, 0.0005, 0.000001))
+rng = list(frange(-0.0001, 0.001, 0.000001)) #поменял диапазон, потому что не отображались пересечения с осью Х
 
 for t in rng:
     Диаграмма_входная.append(U_входное(t))
@@ -137,7 +137,7 @@ ax = plt.gca()
 
 plt.show()
 
-# Пятое задание
+# Пятое задание +
 an = lambda n: (2/(pi*n))
 an_вых = lambda n: an(n)*Сдвиг_по_амплитуде
 
@@ -215,3 +215,156 @@ for n in rng[:5]:
     ax.axhline(y=0, color='k')
     ax.axvline(x=0, color='k')
     plt.show()
+
+# Шестое задание + //ничего не менял)
+АЧХ = []
+rnga = list(range(0, 5000))
+rnga.remove(0)
+for w in rnga:
+    this = k(w)
+    АЧХ.append(sqrt((this.real)**2 + this.imag**2))
+    ФЧХ.append(atan(this.imag / this.real))
+
+
+plt.xlabel('Частота ω, рад/с')
+plt.ylabel('Сила тока I, A')
+plt.ylim(0, 0.8)
+plt.grid(True)
+plt.plot(rnga, АЧХ, color='#039660')
+ax = plt.gca()
+ax.axhline(y=0, color='k')
+ax.axvline(x=0, color='k')
+
+plt.title('АЧХ')
+
+plt.show()
+
+y_val = []
+for n in range(1,10):
+    if (n%2 == 0):
+        out = r'\frac{2}{'+str(n)+'\pi}'
+        plt.plot([n, n], [0,0], marker='x', color='#1f77b4', linestyle='-')
+        plt.text(n, 0.07, f'${out}$', color='white', ha='center', va='center', fontsize=10, alpha=1, bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3', alpha=0.5))
+    else:
+        res = an(n)
+        out = r'\frac{2}{'+str(n)+'\pi}'
+        plt.plot([n, n], [0, res], marker='$--$', color='#1f77b4', linestyle='-')
+        plt.text(n, res+0.07, f'${out}$', color='white', ha='center', va='center', fontsize=14, alpha=1, bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3', alpha=0.5))
+
+plt.ylabel('$|a_n|$ входной')
+plt.xlabel('n')
+plt.ylim(0, 0.8)
+plt.xticks(range(1,10))
+plt.grid(True)
+ax = plt.gca()
+ax.axhline(y=0, color='k')
+ax.axvline(x=0, color='k')
+
+plt.title('Модуль спектра входного сигнала ')
+plt.show()
+
+y_val = []
+for n in range(1,10):
+    if (n%2 == 0):
+        out = r'\frac{2}{'+str(n)+'\pi}'
+        plt.plot([n, n], [0,0], marker='x', color='#cc7a00', linestyle='-')
+        plt.text(n, 0.07, f'${out}$', color='white', ha='center', va='center', fontsize=10, alpha=1, bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3', alpha=0.5))
+    else:
+        res = an_вых(n)
+        out = r'\frac{2}{'+str(n)+'\pi}'
+        plt.plot([n, n], [0, res], marker='$--$', color='#cc7a00', linestyle='-')
+        plt.text(n, res+0.07, f'${out}$', color='white', ha='center', va='center', fontsize=14, alpha=1, bbox=dict(facecolor='black', edgecolor='black', boxstyle='round,pad=0.3', alpha=0.5))
+
+plt.ylabel('$|a_n|$ выходной')
+plt.xlabel('n')
+plt.ylim(0, 0.8)
+plt.xticks(range(1,10))
+plt.grid(True)
+ax = plt.gca()
+ax.axhline(y=0, color='k')
+ax.axvline(x=0, color='k')
+
+plt.title('Модуль спектра выходного сигнала ')
+plt.show()
+
+# Седьмое задание +
+z_вход = lambda w: (19200+32j*w)/(1500+1j*w) #написал свое z(w)
+
+модуль = []
+фаза = []
+активная = []
+реактивная = []
+rng = list(range(1, 5000))
+
+for w in rng:
+    this = z_вход(w)
+    модуль.append(sqrt((this.real)**2 + this.imag**2))
+    фаза.append(atan(this.imag / this.real))
+    активная.append(this.real)
+    реактивная.append(this.imag)
+
+plt.xlabel('Частота ω, рад/с')
+plt.ylabel('Z, Ом')
+plt.title("Модуль сопротивления")
+plt.grid(True)
+plt.plot(rng, модуль)
+plt.show()
+
+plt.xlabel('Частота ω, рад/с')
+plt.ylabel('Z, Ом')
+plt.title("Фаза сопротивления")
+plt.grid(True)
+plt.plot(rng, фаза, color='#cc7a00')
+plt.show()
+
+plt.xlabel('Частота ω, рад/с')
+plt.ylabel('Z, Ом')
+plt.title("Активная часть сопротивления")
+plt.grid(True)
+plt.plot(rng, активная, color='#039660')
+plt.show()
+
+plt.xlabel('Частота ω, рад/с')
+plt.ylabel('Z, Ом')
+plt.title("Реактивная часть сопротивления")
+plt.grid(True)
+plt.plot(rng, реактивная, color='#DC143C')
+plt.show()
+
+# Восьмое задание+ \\ ничего не менял
+w = 2 * 10**3
+Амплитуда = 1
+z = z_вход(w)
+U_входное = lambda t: Амплитуда*sin(w*t)
+A_входное = lambda t: (Амплитуда/sqrt((z.real)**2 + z.imag**2))*sin(w*t + atan(z.imag / z.real))
+
+Диаграмма_входная_U = []
+Диаграмма_входная_A = []
+rng = list(frange(0, 0.01, 0.000001))
+
+for t in rng:
+    Диаграмма_входная_U.append(U_входное(t))
+    Диаграмма_входная_A.append(A_входное(t))
+
+plt.title("Временная диаграмма напряжения")
+plt.plot(rng, Диаграмма_входная_U)
+
+
+plt.grid(True)
+
+plt.ylabel('Напряжение U, В')
+plt.xlabel('Время t, c')
+ax = plt.gca()
+
+plt.show()
+
+plt.title("Временная диаграмма тока")
+plt.plot(rng, Диаграмма_входная_A, color='#cc7a00')
+
+plt.grid(True)
+
+plt.ylabel('Сила тока I, А')
+plt.xlabel('Время t, c')
+ax = plt.gca()
+
+plt.show()
